@@ -10,7 +10,7 @@ import Dashboard from "./pages/admin-view/Dashboard.jsx";
 import Products from "./pages/admin-view/Products.jsx";
 import Orders from "./pages/admin-view/Orders.jsx";
 
-import Index from "./components/not-found/index.jsx";
+import Index from './components/not-found/Index.jsx';
 
 import Home from "./pages/shopping-view/Home.jsx";
 import Listing from "./pages/shopping-view/Listing.jsx";

@@ -203,7 +203,7 @@ const Cart = () => {
                   </span>
                 </div>
 
-                <button onClick={()=>navigate('/shop/checkout')} className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-pink-300/50 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 transition-all duration-300" onClick={() => navigate("/checkout")}>
+                <button className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-pink-300/50 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 transition-all duration-300" onClick={() => navigate("/checkout")}>
                   <FiCreditCard size={18} /> Secure Checkout
                 </button>
 
