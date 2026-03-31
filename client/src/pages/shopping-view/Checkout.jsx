@@ -49,11 +49,16 @@ const Checkout = () => {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (addresses && addresses.length > 0 && !selectedAddress) {
-      const defaultAddr = addresses.find((a) => a.isDefault) || addresses[0];
-      setSelectedAddress(defaultAddr._id);
-    }
-  }, [addresses]);
+  if (!addresses?.length) return;
+
+  setSelectedAddress((prev) => {
+    if (prev) return prev; // ✅ prevent re-setting
+
+    const defaultAddr = addresses.find((a) => a.isDefault) || addresses[0];
+
+    return defaultAddr._id;
+  });
+}, [addresses]);
 
   const cartTotal = cartItems.reduce(
     (total, item) => total + (item.salePrice > 0 ? item.salePrice : item.price) * item.quantity, 
@@ -65,103 +70,119 @@ const Checkout = () => {
 
 
   const handlePlaceOrder = async () => {
-    try {
-      if (cartItems.length === 0) {
-        toast.error("Cart is empty");
-        return;
-      }
+  try {
+    if (cartItems.length === 0) {
+      toast.error("Cart is empty");
+      return;
+    }
 
-      if (!selectedAddress) {
-        toast.error("Select address");
-        return;
-      }
+    if (!selectedAddress) {
+      toast.error("Select address");
+      return;
+    }
 
-      const selectedAddr = addresses.find(
-        (a) => a._id === selectedAddress
+    setIsProcessing(true); // ✅ START LOADING
+
+    const selectedAddr = addresses.find(
+      (a) => a._id === selectedAddress
+    );
+
+    // 🟡 COD FLOW
+    if (selectedPayment === "cod") {
+      const res = await dispatch(
+        createCODOrderThunk({
+          cartItems,
+          address: selectedAddr,
+          totalAmount: finalTotal,
+          userId: user._id,
+        })
       );
 
-      // 🟡 COD FLOW
-      if (selectedPayment === "cod") {
+      if (res.payload?.success) {
+        toast.success("Order placed 🎉");
+        await dispatch(clearCartAsync()); // ✅ await
+        navigate("/shop/confirmation");
+      } else {
+        toast.error(res.payload?.message || "Order failed");
+      }
+
+      setIsProcessing(false);
+      return;
+    }
+
+    // 🟢 ONLINE PAYMENT
+
+    // ❗ check Razorpay loaded
+    if (!window.Razorpay) {
+      toast.error("Payment SDK not loaded. Try again.");
+      setIsProcessing(false);
+      return;
+    }
+
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
+      { amount: finalTotal },
+      { withCredentials: true }
+    );
+
+    const order = data.order;
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY,
+      amount: order.amount,
+      currency: "INR",
+      name: "Fashion City",
+      description: "Order Payment",
+      order_id: order.id,
+
+      handler: async function (response) {
         const res = await dispatch(
-          createCODOrderThunk({
+          verifyPaymentThunk({
+            ...response,
             cartItems,
             address: selectedAddr,
             totalAmount: finalTotal,
             userId: user._id,
+            paymentMethod: selectedPayment,
           })
         );
-        if (res.payload?.success) {
-          toast.success("Order placed 🎉");
-          // 🔥 clear cart
-          dispatch(clearCartAsync());
 
+        if (res.payload?.success) {
+          toast.success("Payment Successful 🎉");
+          await dispatch(clearCartAsync()); // ✅ await
           navigate("/shop/confirmation");
         } else {
-          toast.error(res.payload?.message || "Order failed");
+          toast.error("Payment verification failed");
         }
-        return;
-      }
 
-      // 🟢 ONLINE PAYMENT
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
-        { amount: finalTotal },
-        { withCredentials: true } // ✅ important
-      );
-      const order = data.order;
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY,
-        amount: order.amount,
-        currency: "INR",
-        name: "Fashion City",
-        description: "Order Payment",
-        order_id: order.id,
+        setIsProcessing(false); // ✅ STOP LOADING
+      },
 
-        handler: async function (response) {
-          const res = await dispatch(
-            verifyPaymentThunk({
-              ...response,
-              cartItems,
-              address: selectedAddr,
-              totalAmount: finalTotal,
-              userId: user._id,
-              paymentMethod: selectedPayment,
-            })
-          );
-
-          if (res.payload?.success) {
-            toast.success("Payment Successful 🎉");
-
-            // 🔥 clear cart
-            dispatch(clearCartAsync());
-
-            navigate("/shop/confirmation");
-          } else {
-            toast.error("Payment verification failed");
-          }
+      modal: {
+        ondismiss: function () {
+          toast.error("Payment cancelled ❌");
+          setIsProcessing(false); // ✅ IMPORTANT FIX
         },
+      },
 
-        modal: {
-          ondismiss: function () {
-            toast.error("Payment cancelled ❌");
-          },
-        },
+      prefill: {
+        name: user?.name,
+      },
 
-        prefill: {
-          name: user?.name,
-        },
+      theme: {
+        color: "#ec4899",
+      },
+    };
 
-        theme: {
-          color: "#ec4899",
-        },
-      };
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    }
-  };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong");
+    setIsProcessing(false); // ✅ FIX
+  }
+};
 
   if (cartItems.length === 0) {
     return (
