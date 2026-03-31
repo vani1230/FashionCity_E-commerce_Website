@@ -161,14 +161,6 @@ const Login = () => {
               <span className="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold uppercase tracking-wider">Or</span>
               <div className="flex-grow border-t border-gray-200"></div>
             </div>
-
-            <button
-              type="button"
-              className="w-full flex items-center justify-center gap-2 sm:gap-3 bg-white/80 backdrop-blur-md border border-white/80 hover:bg-white px-4 py-3 rounded-[1rem] text-gray-700 font-bold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 text-sm sm:text-base"
-            >
-              <FcGoogle size={20} />
-              Continue with Google
-            </button>
           </form>
 
           {/* Footer */}
