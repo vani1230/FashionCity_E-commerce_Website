@@ -78,7 +78,7 @@ export const LoginController = async (req, res) => {
       process.env.JWT_CLIENT_SECRET_KEY,
       { expiresIn: "7d" },
     );
-    res.cookie("token", token, { httpOnly: true, secure: false,  sameSite: "lax", });
+    res.cookie("token", token, { httpOnly: true, secure: true,  sameSite: "lax", });
     // 5️⃣ Send response
     res.status(200).json({
       success: true,
