@@ -10,7 +10,7 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/cart/fetchAll", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/cart/fetchAll`, {
         withCredentials: true,
       });
       return res.data.cart;
@@ -26,7 +26,7 @@ export const addToCartAsync = createAsyncThunk(
   async (product, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/cart/add",
+        `${import.meta.env.VITE_API_URL}/api/cart/add`,
         { productId: product._id },
         { withCredentials: true },
       );
@@ -43,7 +43,7 @@ export const removeFromCartAsync = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/cart/remove",
+        `${import.meta.env.VITE_API_URL}/api/cart/remove`,
         { productId: id },
         { withCredentials: true },
       );
@@ -59,7 +59,7 @@ export const clearCartAsync = createAsyncThunk(
   "cart/clear",
   async (_, { rejectWithValue }) => {
     try {
-      await axios.delete("http://localhost:5000/api/cart/delete", {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/cart/delete`, {
         withCredentials: true,
       });
       return [];
@@ -75,7 +75,7 @@ export const increaseQtyAsync = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/cart/increase",
+        `${import.meta.env.VITE_API_URL}/api/cart/increase`,
         { productId: id },
         { withCredentials: true }
       );
@@ -93,7 +93,7 @@ export const decreaseQtyAsync = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/cart/decrease",
+        `${import.meta.env.VITE_API_URL}/api/cart/decrease`,
         { productId: id },
         { withCredentials: true }
       );

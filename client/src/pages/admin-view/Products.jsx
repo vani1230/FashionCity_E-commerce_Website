@@ -36,7 +36,7 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/admin/products/getting",
+        `${import.meta.env.VITE_API_URL}/api/admin/products/getting`,
       );
       setProducts(res.data.products);
     } catch (error) {
@@ -84,8 +84,8 @@ const Products = () => {
 
     try {
       const url = editingProductId
-        ? `http://localhost:5000/api/admin/products/update/${editingProductId}`
-        : "http://localhost:5000/api/admin/products/add";
+        ? `${import.meta.env.VITE_API_URL}/api/admin/products/update/${editingProductId}`
+        : `${import.meta.env.VITE_API_URL}/api/admin/products/add`;
 
       const method = editingProductId ? "put" : "post";
 
@@ -121,7 +121,7 @@ const Products = () => {
     if (!confirmDelete) return;
     try {
       await axios.delete(
-        `http://localhost:5000/api/admin/products/delete/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/admin/products/delete/${id}`,
       );
       toast.success("Product deleted");
       fetchProducts();

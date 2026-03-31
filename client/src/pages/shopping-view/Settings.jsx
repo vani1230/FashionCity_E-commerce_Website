@@ -28,7 +28,7 @@ const Settings = () => {
     }
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/updatepassword",
+        `${import.meta.env.VITE_API_URL}/api/auth/updatepassword`,
         { email: user?.email, password: newPassword },
         { withCredentials: true }
       );

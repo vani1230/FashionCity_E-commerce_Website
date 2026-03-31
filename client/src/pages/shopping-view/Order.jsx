@@ -139,7 +139,7 @@ const Orders = () => {
             {/* 🧾 INVOICE BUTTON */}
             {selectedOrder.invoiceUrl ? (
               <a
-                href={`http://localhost:5000/${selectedOrder.invoiceUrl}`}
+                href={`${import.meta.env.VITE_API_URL}/${selectedOrder.invoiceUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 inline-block text-blue-500 underline text-sm"

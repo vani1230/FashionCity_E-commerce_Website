@@ -6,7 +6,7 @@ export const fetchDashboardDataThunk = createAsyncThunk(
   "dashboard/fetchData",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/order/admin/all", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/order/admin/all`, {
         withCredentials: true,
       });
 
@@ -22,7 +22,7 @@ export const fetchUsersThunk = createAsyncThunk(
   "dashboard/fetchUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/users", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/users`, {
         withCredentials: true,
       });
 
@@ -39,7 +39,7 @@ export const updateOrderStatusThunk = createAsyncThunk(
   async ({ orderId, status }, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/order/${orderId}`,
+        `http:///api/order/${orderId}`,
         { status },
         { withCredentials: true },
       );

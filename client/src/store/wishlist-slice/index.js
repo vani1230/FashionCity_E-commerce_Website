@@ -10,7 +10,7 @@ export const fetchWishlist = createAsyncThunk(
   "wishlist/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/wishlist/fetch", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/wishlist/fetch`, {
         withCredentials: true,
       });
       return res.data.wishlist;
@@ -26,7 +26,7 @@ export const addToWishlistAsync = createAsyncThunk(
   async (product, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/wishlist/add",
+        `${import.meta.env.VITE_API_URL}/api/wishlist/add`,
         { productId: product._id },
         { withCredentials: true },
       );
@@ -43,7 +43,7 @@ export const removeFromWishlistAsync = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/wishlist/remove",
+        `${import.meta.env.VITE_API_URL}/api/wishlist/remove`,
         { productId: id },
         { withCredentials: true },
       );
@@ -59,7 +59,7 @@ export const clearWishlistAsync = createAsyncThunk(
   "wishlist/clear",
   async (_, { rejectWithValue }) => {
     try {
-      await axios.delete("http://localhost:5000/api/wishlist/delete-all", {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/wishlist/delete-all`, {
         withCredentials: true,
       });
       return [];

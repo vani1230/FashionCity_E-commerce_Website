@@ -126,7 +126,7 @@ const AdminOrders = () => {
             <div className="mt-4">
               {order.invoiceUrl ? (
                 <a
-                  href={`http://localhost:5000/${order.invoiceUrl}`}
+                  href={`${import.meta.env.VITE_API_URL}/${order.invoiceUrl}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 underline text-sm"

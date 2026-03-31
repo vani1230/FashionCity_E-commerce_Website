@@ -31,7 +31,7 @@ const Home = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/products/getting");
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/products/getting`);
         if (res.data.success) {
           setFeaturedProducts(res.data.products.slice(0, 4));
         }

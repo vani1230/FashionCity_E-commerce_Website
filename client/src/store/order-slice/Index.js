@@ -7,7 +7,7 @@ export const createCODOrderThunk = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/order/cod",
+        `${import.meta.env.VITE_API_URL}/api/order/cod`,
         payload,
         { withCredentials: true }, // 🔥 important
       );
@@ -25,7 +25,7 @@ export const verifyPaymentThunk = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/order/verify-payment",
+        `${import.meta.env.VITE_API_URL}/api/order/verify-payment`,
         payload,
         { withCredentials: true },
       );
@@ -43,7 +43,7 @@ export const fetchUserOrdersThunk = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/order/user/${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/order/user/${userId}`,
         { withCredentials: true },
       );
 
@@ -59,7 +59,7 @@ export const fetchAllOrdersThunk = createAsyncThunk(
   "order/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/order/admin/all", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/order/admin/all`, {
         withCredentials: true,
       });
       // console.log(res.data.orders)
@@ -76,7 +76,7 @@ export const updateOrderStatusThunk = createAsyncThunk(
   async ({ orderId, status }, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/order/${orderId}`,
+        `${import.meta.env.VITE_API_URL}/api/order/${orderId}`,
         { status },
         { withCredentials: true },
       );
@@ -93,7 +93,7 @@ export const fetchDashboardDataThunk = createAsyncThunk(
   "dashboard/fetchData",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/order/admin/all", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/order/admin/all`, {
         withCredentials: true,
       });
 
