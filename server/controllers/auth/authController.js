@@ -31,7 +31,7 @@ export const RegisterController = async (req, res) => {
       message: "Registration successful",
     });
   } catch (error) {
-    console.log(error);
+    console.log("Register Error:",error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
