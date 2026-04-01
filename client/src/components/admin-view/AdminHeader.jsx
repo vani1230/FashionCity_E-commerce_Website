@@ -1,4 +1,4 @@
-import { LogoutUser } from "@/store/auth-slice";
+import { LogoutUser, resetTokenAndCredentials } from "@/store/auth-slice";
 import { Menu, UserCircle, LogOut, Store } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -11,16 +11,20 @@ const AdminHeader = ({ setSidebarOpen }) => {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    dispatch(LogoutUser()).then((data) => {
-      console.log("Response:", data);
+    // dispatch(LogoutUser()).then((data) => {
+      // console.log("Response:", data);
   
-      if (data?.payload?.success) {
-        toast.success(data.payload.message);
-        navigate("/auth/login");
-      } else {
-        toast.error(data?.payload?.message || "Something went wrong ❌");
-      }
-    });
+      // if (data?.payload?.success) {
+      //   toast.success(data.payload.message);
+      //   navigate("/auth/login");
+      // } else {
+      //   toast.error(data?.payload?.message || "Something went wrong ❌");
+      // }});
+
+      dispatch(resetTokenAndCredentials())
+      sessionStorage.clear()
+      navigate('/auth/login')
+      toast.success("Logged Out Successfully")
   }
   return (
     <header className="h-16 bg-white shadow-sm flex items-center justify-between px-6 relative">

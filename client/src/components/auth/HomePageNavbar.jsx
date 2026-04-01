@@ -12,7 +12,7 @@ import {
 import { LiaHeartSolid } from "react-icons/lia";
 
 import { useDispatch, useSelector } from "react-redux";
-import { LogoutUser } from "../../store/auth-slice/index.js";
+import { LogoutUser, resetTokenAndCredentials } from "../../store/auth-slice/index.js";
 import { toast } from "sonner";
 
 const HomePageNavbar = () => {
@@ -36,14 +36,17 @@ const HomePageNavbar = () => {
   };
 
   const handleLogout = async () => {
-    dispatch(LogoutUser()).then((data) => {
-      if (data?.payload?.success) {
-        toast.success(data.payload.message);
-        navigate("/auth/login");
-      } else {
-        toast.error(data?.payload?.message || "Something went wrong ❌");
-      }
-    });
+    // dispatch(LogoutUser()).then((data) => {
+    //   if (data?.payload?.success) {
+      //     navigate("/auth/login");
+      //   } else {
+        //     toast.error(data?.payload?.message || "Something went wrong ❌");
+        //   }
+        // });
+        dispatch(resetTokenAndCredentials())
+        sessionStorage.clear()
+        navigate('/auth/login')
+        toast.success("Logged Out Successfully");
   };
 
   return (

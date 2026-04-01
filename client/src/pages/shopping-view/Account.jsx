@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FiUser, FiPackage, FiMapPin, FiSettings, FiLogOut } from "react-icons/fi";
-import { LogoutUser } from "../../store/auth-slice/index.js";
+import { LogoutUser, resetTokenAndCredentials } from "../../store/auth-slice/index.js";
 
 // Import your newly split components
 import Address from '../shopping-view/Address.jsx';
@@ -32,14 +32,19 @@ const Account = () => {
   };
 
   const handleLogout = () => {
-    dispatch(LogoutUser()).then((data) => {
-      if (data?.payload?.success) {
-        toast.success(data.payload.message);
-        navigate("/auth/login");
-      } else {
-        toast.error("Logout failed ❌");
-      }
-    });
+    // dispatch(LogoutUser()).then((data) => {
+    //   if (data?.payload?.success) {
+    //     toast.success(data.payload.message);
+    //     navigate("/auth/login");
+    //   } else {
+    //     toast.error("Logout failed ❌");
+    //   }
+    // });
+
+    dispatch(resetTokenAndCredentials())
+          sessionStorage.clear()
+          navigate('/auth/login')
+          toast.success("Logged Out Successfully")
   };
 
   const renderContent = () => {

@@ -6,7 +6,8 @@ const initialState = {
   isLoading: false,
   isCheckingAuth: true,   // important for route protection
   user: null,
-  error: null
+  error: null,
+  token:null
 };
 
 // REGISTER
@@ -36,6 +37,7 @@ export const LoginUser = createAsyncThunk(
         formData,
         { withCredentials: true }
       );
+      console.log("TOKEN:", sessionStorage.getItem("token"));
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data);
@@ -43,14 +45,20 @@ export const LoginUser = createAsyncThunk(
   }
 );
 
+
 // CHECK AUTH (runs on refresh)
 export const checkAuth = createAsyncThunk(
   "/auth/checkAuth",
   async (_, { rejectWithValue }) => {
     try {
+      const token = sessionStorage.getItem("token");
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/auth/checkAuth`,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return res.data;
     } catch (err) {
@@ -95,7 +103,13 @@ export const fetchUserFromToken = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetTokenAndCredentials :(state)=>{
+      state.isAuthenticated = false;
+      state.user = null;
+      state.token = null;
+    }
+  },
 
   extraReducers: (builder) => {
 
@@ -123,12 +137,15 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.isAuthenticated = true;
         state.error = null;
+        state.token = action.payload.token;
+        sessionStorage.setItem('token',action.payload.token)
       })
       .addCase(LoginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
         state.error = action.payload?.message;
+        state.token = null;
       });
 
     // CHECK AUTH
@@ -174,5 +191,5 @@ const authSlice = createSlice({
 
   }
 });
-
+export const {resetTokenAndCredentials} = authSlice.actions
 export default authSlice.reducer;
