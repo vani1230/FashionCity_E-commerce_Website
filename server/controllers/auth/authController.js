@@ -79,10 +79,23 @@ export const LoginController = async (req, res) => {
       { expiresIn: "7d" },
     );
     res.cookie("token", token, { httpOnly: true, secure: true,  sameSite: "lax", });
+
     // 5️⃣ Send response
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Login successful",
+    //   token,
+    //   user: {
+    //     id: user._id,
+    //     name: user.name,
+    //     email: user.email,
+    //     role: user.role,
+    //   },
+    // });
+
     res.status(200).json({
-      success: true,
-      message: "Login successful",
+      success:true,
+      message:"Logged In Successfully",
       token,
       user: {
         id: user._id,
@@ -90,7 +103,7 @@ export const LoginController = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-    });
+    })
   } catch (error) {
     console.log("Login Error:", error);
 
