@@ -73,7 +73,7 @@ const Wishlist = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-2">It's empty here!</h2>
             <p className="text-gray-500 mb-6">You haven't added any items to your wishlist yet.</p>
             <button 
-               onClick={() => navigate("/shop/home")}
+               onClick={() => navigate("/home")}
                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-pink-300/50 hover:-translate-y-1 transition-all"
             >
               Start Exploring
